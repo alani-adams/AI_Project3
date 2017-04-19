@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <string>
+#include <stdlib.h> 
 using namespace std;
 
 #include "game.h"
@@ -149,17 +150,40 @@ void writeActions(std::vector<state> states, string writeFile) //send vector (ei
 	actionsFile.close();
 }
 
-void readActions(string readFile)
+void readActions(string readFile) //send corresponding action file to read from
 {
 	ifstream read;
  	read.open (readFile);
 
  	string item;
+ 	std::vector<state>::iterator current;
  	while ( getline ( read, item) )
  	{
- 		//check if state, if so find state in vector and save as current
- 		//check if action, if so create action and add to state's vector of actions
- 		//make sure to convert to int for location and float for value
+ 		if(item[0] == "_" || item[0] == "X" || item[0] == "O")
+ 		{
+ 			//if state, find state in vector and save as current
+ 			std::vector<state>::iterator it;
+ 			for(it = states.begin(); it < states.end(); it++)
+ 			{
+ 				if(item == it.board)
+ 				{
+ 					current = it;
+ 					break;
+ 				}
+ 			}
+ 		}
+ 		else
+ 		{
+ 			//if action, create action and add to current state's vector of actions
+ 			action myaction;
+
+ 			//convert to int for location and float for value
+ 			myaction.location = atoi(item[0]);
+ 			string value(item.begin()+2, item.end()); //rm location int and space from string when copying to value
+ 			myaction.value = strtof(value, NULL);
+
+ 			current.actions.push_back(myaction);
+ 		}
  	}
 
 	read.close();
