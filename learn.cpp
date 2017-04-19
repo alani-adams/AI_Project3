@@ -12,7 +12,7 @@ int main()
 	int turn = 1;
 	while(ifWin(currentBoard) == 0)
 	{
-		evaluate(currentState, turn);
+		evaluateLearn(currentState, turn);
 
 		if(turn == 1)
 			turn=2;

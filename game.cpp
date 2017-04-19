@@ -44,7 +44,7 @@ using namespace std;
 // 	}
 // }
 
-void evaluate(state s, int turn) 
+void evaluateHuman(state s, int turn) 
 {
 	//checks for actions
 	//selects best action
@@ -54,22 +54,68 @@ void evaluate(state s, int turn)
 		s.board[location] = 'X';
 	else
 		s.board[location] = 'O';
-	action a;
-	a.value = 0.5;//NOT SURE, dependent on data
-	a.location = location;
+	action a = chooseActionHuman(turn, s);
 	s.actions.insert(a);
 
 }
 
-chooseAction( int player, ) 
+void evaluateLearn(state s, int turn) 
 {
-	//choose randomly taking values in to consideration, 
-	//favor exploration (choosing lower values disproportionately), 
-	//favor exploitation (choosing higher values disproportionately).
+	//checks for actions
+	//selects best action
 
+	int location=0;//chosen move/action //dependent on data
+	if(turn == 1)
+		s.board[location] = 'X';
+	else
+		s.board[location] = 'O';
+	action a = chooseActionLearn(turn, s);
+	s.actions.insert(a);
 
 }
 
+action chooseActionHuman( int player, state s, player p) 
+{
+	//choose randomly taking values in to consideration, 
+	//favor exploitation (choosing higher values disproportionately).
+
+
+	//check possible actions for that player, 
+	action a;
+	for(int i=0; i<p.states.size(); i++)
+	{
+		
+		if(s.board == p.states[i].board)
+		{
+			float highestValue = -1000; //because values could be negative
+			int bestLocation = 0;
+			for(int j=0; j<p.actions.size(); j++)
+			{
+				if(p.actions[j].value > highestValue)
+				{
+					highestValue = p.actions[j].value;
+					bestLocation = j;
+				}
+			}
+			a.value = highestValue;
+			a.location = bestLocation;
+
+			return a;
+		}
+	}
+	return a;
+
+}
+
+action chooseActionLearn( int player, state s) 
+{
+	//choose randomly taking values in to consideration, 
+	//favor exploration (choosing lower values disproportionately), 
+	//choose highest value or random when equal
+
+
+
+}
 void learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
 {
 	//apply 1 to last move
