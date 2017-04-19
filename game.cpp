@@ -15,53 +15,6 @@ using namespace std;
 
 #include "game.h"
 
-int ifWin(string board, state s)
-{
-	//continue == 0, winner player1 == 1, winner player2 == 2, draw == 3
-	if((board[0] == board[1] == board[2]) && (board[0] == 'X') )
-		return 1;
-	else if((board[0] == board[1] == board[2]) && (board[0] == 'O') )
-		return 2;
-	else if((board[3] == board[4] == board[5]) && (board[3] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[3] == board[4] == board[5]) && (board[3] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[6] == board[7] == board[8]) && (board[6] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[6] == board[7] == board[8]) && (board[6] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[0] == board[3] == board[6]) && (board[0] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[0] == board[3] == board[6]) && (board[0] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[1] == board[4] == board[7]) && (board[1] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[1] == board[4] == board[7]) && (board[1] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[2] == board[5] == board[8]) && (board[2] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[2] == board[5] == board[8]) && (board[2] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[0] == board[4] == board[8]) && (board[0] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[0] == board[4] == board[8]) && (board[0] == 'O') )
-		return learningFactor(2,1,s);
-	else if((board[2] == board[4] == board[6]) && (board[2] == 'X') )
-		return learningFactor(1,2,s);
-	else if((board[2] == board[4] == board[6]) && (board[2] == 'O') )
-		return learningFactor(2,1,s);
-
-	bool draw = true;
-	for(int i=0; i<9; i++)//checking if there are no moves left
-	{
-		if(board[i] == '_')
-			draw == false;
-	}
-	if(draw)
-		return 3;
-	return 0;
-}
-
 state possibleStates( state s, string board, int player )
 {
 	int count=0;
@@ -137,5 +90,89 @@ void learningFactor(int winner, int loser, state finalStateWinner, state finalSt
 	}
 }
 
-void writeResults(string file);
-void readFile(string file);
+int ifWin(string board, state s)
+{
+	//continue == 0, winner player1 == 1, winner player2 == 2, draw == 3
+	if((board[0] == board[1] == board[2]) && (board[0] == 'X') )
+		return 1;
+	else if((board[0] == board[1] == board[2]) && (board[0] == 'O') )
+		return 2;
+	else if((board[3] == board[4] == board[5]) && (board[3] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[3] == board[4] == board[5]) && (board[3] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[6] == board[7] == board[8]) && (board[6] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[6] == board[7] == board[8]) && (board[6] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[0] == board[3] == board[6]) && (board[0] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[0] == board[3] == board[6]) && (board[0] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[1] == board[4] == board[7]) && (board[1] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[1] == board[4] == board[7]) && (board[1] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[2] == board[5] == board[8]) && (board[2] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[2] == board[5] == board[8]) && (board[2] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[0] == board[4] == board[8]) && (board[0] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[0] == board[4] == board[8]) && (board[0] == 'O') )
+		return learningFactor(2,1,s);
+	else if((board[2] == board[4] == board[6]) && (board[2] == 'X') )
+		return learningFactor(1,2,s);
+	else if((board[2] == board[4] == board[6]) && (board[2] == 'O') )
+		return learningFactor(2,1,s);
+
+	bool draw = true;
+	for(int i=0; i<9; i++)//checking if there are no moves left
+	{
+		if(board[i] == '_')
+			draw == false;
+	}
+	if(draw)
+		return 3;
+	return 0;
+}
+
+void writeActions(string readFile, string writeFile) //TODO: edit to take action values from vector to put into file
+{
+	ifstream read;
+	ofstream actions;
+
+ 	read.open (readFile);
+ 	actions.open (writeFile);
+
+ 	string state;
+ 	while ( getline ( read, state) )
+ 	{
+ 		actions << state << endl;
+
+ 		for(int i = 0; i < 10; i++)
+ 		{
+ 			if(state[i] == '_')
+ 				actions << i << " 0.5" << endl;
+ 		}
+
+ 	}
+
+	read.close();
+	actions.close();
+}
+
+void readActions(string readFile)
+{
+	ifstream read;
+ 	read.open (readFile);
+
+ 	string item;
+ 	while ( getline ( read, item) )
+ 	{
+ 		//check if state, if so find state in vector and save as current
+ 		//check if action, if so create action and add to state's vector of actions
+ 	}
+
+	read.close();
+}
