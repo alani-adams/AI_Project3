@@ -150,7 +150,7 @@ void writeActions(std::vector<state> states, string writeFile) //send vector (ei
 	actionsFile.close();
 }
 
-void readActions(string readFile) //send corresponding action file to read from
+void readActions(std::vector<state> states, string readFile) //send vector (either Xstates or Ostates) and corresponding action file to read from
 {
 	ifstream read;
  	read.open (readFile);
