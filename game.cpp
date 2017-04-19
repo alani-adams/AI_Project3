@@ -107,14 +107,29 @@ action chooseActionHuman( int player, state s, player p)
 
 }
 
-action chooseActionLearn( int player, state s) 
+action chooseActionLearn( int player, state s, player p) 
 {
 	//choose randomly taking values in to consideration, 
 	//favor exploration (choosing lower values disproportionately), 
 	//choose highest value or random when equal
+	//int randNum1 = rand() % 100;
+	action a;
+	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
+	int valueSum=0;
+	int valueProb[9];
+	for(int i=0; i<p.actions.size(); i++)
+	{
+		valueSum += (p.actions[i].value * 100);
+		valueProb[i] = valueSum;
+	}
+	int randNum = rand() % valueSum;
+	
+	for(int i=0; i<p.actions.size(); i++)
+	{
 
+	}
 
-
+	return a;
 }
 void learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
 {
