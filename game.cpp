@@ -123,10 +123,25 @@ action chooseActionLearn( int player, state s, player p)
 		valueProb[i] = valueSum;
 	}
 	int randNum = rand() % valueSum;
-	
-	for(int i=0; i<p.actions.size(); i++)
-	{
 
+	if(0<randNum && randNum<valueProb[1])
+	{
+		a.value = p.actions[0].value;
+		a.location = p.actions[0].location;
+		return a;
+	}
+
+	for(int i=0; i<(p.actions.size()-1); i++)
+	{
+		for(int j=1; j<p.actions.size(); j++)
+		{
+			if(valueProb[i]<randNum && randNum<valueProb[j])
+			{
+				a.value = p.actions[j].value;
+				a.location = p.actions[j].location;
+				return a;
+			}
+		}
 	}
 
 	return a;
