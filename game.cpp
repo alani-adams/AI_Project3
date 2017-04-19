@@ -10,41 +10,41 @@ using namespace std;
 
 #include "game.h"
 
-state possibleStates( state s, string board, int player )
-{
-	int count=0;
-	for(int i=0; i<9; i++)//count how many open spots
-	{
-		if(board[i] == '_')
-			count++;
-	}
+// state possibleStates( state s, string board, int player )
+// {
+// 	int count=0;
+// 	for(int i=0; i<9; i++)//count how many open spots
+// 	{
+// 		if(board[i] == '_')
+// 			count++;
+// 	}
 
 
-	for(int j=0; j<9; j++)
-	{
-		string temp = board;
+// 	for(int j=0; j<9; j++)
+// 	{
+// 		string temp = board;
 		
-		if(board[j] == '_')
-		{
-			action act;
-			act.location = j;
-			act.value = 0.5;//IDK WHAT THE VALUE IS!!!!!!!!! Do we need to look it up somehow?
-			if(player == 1)
-			{
-				temp[j] = 'X';
+// 		if(board[j] == '_')
+// 		{
+// 			action act;
+// 			act.location = j;
+// 			act.value = 0.5;//IDK WHAT THE VALUE IS!!!!!!!!! Do we need to look it up somehow?
+// 			if(player == 1)
+// 			{
+// 				temp[j] = 'X';
 
-			}
-			else
-			{
-				temp[j] = 'O';
+// 			}
+// 			else
+// 			{
+// 				temp[j] = 'O';
 
-			}
-			s.possibleActions.insert(act);
-		}
-	}
-}
+// 			}
+// 			s.possibleActions.insert(act);
+// 		}
+// 	}
+// }
 
-void evaluate(string board) // finds the best action to take
+void evaluate(state s, int turn) 
 {
 	//checks for actions
 	//selects best action
@@ -61,7 +61,7 @@ void evaluate(string board) // finds the best action to take
 
 }
 
-chooseAction() 
+chooseAction( int player, ) 
 {
 	//choose randomly taking values in to consideration, 
 	//favor exploration (choosing lower values disproportionately), 
