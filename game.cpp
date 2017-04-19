@@ -1,15 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <map>
 #include <vector>
-#include <queue>
-#include <set>
 #include <algorithm>
 #include <cstdio>
-#include <ctime>
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
 #include <string>
 using namespace std;
 
@@ -137,29 +131,22 @@ int ifWin(string board, state s)
 	return 0;
 }
 
-void writeActions(string readFile, string writeFile) //TODO: edit to take action values from vector to put into file
+void writeActions(std::vector<state> states, string writeFile) //send vector (either Xstates or Ostates) and corresponding actions output file
 {
-	ifstream read;
 	ofstream actions;
+ 	actionsFile.open (writeFile);
 
- 	read.open (readFile);
- 	actions.open (writeFile);
-
- 	string state;
- 	while ( getline ( read, state) )
- 	{
- 		actions << state << endl;
-
- 		for(int i = 0; i < 10; i++)
- 		{
- 			if(state[i] == '_')
- 				actions << i << " 0.5" << endl;
- 		}
-
+ 	std::vector<state>::iterator it, it2;
+ 	for(it = states.begin(); it < states.end(); it++)
+ 	{	
+ 		actionsFile << it.board << endl;
+ 		for(it2 = it.actions.begin(); it2 < it.actions.end(); it2++)
+	 	{
+	 		actionsFile << it2.location << " " << it2.value << endl;
+	 	}
  	}
 
-	read.close();
-	actions.close();
+	actionsFile.close();
 }
 
 void readActions(string readFile)
@@ -172,6 +159,7 @@ void readActions(string readFile)
  	{
  		//check if state, if so find state in vector and save as current
  		//check if action, if so create action and add to state's vector of actions
+ 		//make sure to convert to int for location and float for value
  	}
 
 	read.close();
