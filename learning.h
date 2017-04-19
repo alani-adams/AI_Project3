@@ -8,5 +8,5 @@ struct action
 struct state
 {
 		string board;
-		vector<action> possibleActions;
+		vector<action> actions;
 };
