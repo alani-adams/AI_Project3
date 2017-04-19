@@ -46,14 +46,18 @@ state possibleStates( state s, string board, int player )
 
 void evaluate(string board) // finds the best action to take
 {
-	if(ifWin(board, s) == 1)
-		learningFactor(1,2,player1State, player2State);
-	else if(ifWin(board, s) == 2)
-		learningFactor(2,1,player2State,player1State);
-	else if(ifWin(board, s) == 3)//out of moves/draw
-		return;//end the game
+	//checks for actions
+	//selects best action
+
+	int location=0;//chosen move/action //dependent on data
+	if(turn == 1)
+		s.board[location] = 'X';
 	else
-		;//continue the game, dependent on main cpp file
+		s.board[location] = 'O';
+	action a;
+	a.value = 0.5;//NOT SURE, dependent on data
+	a.location = location;
+	s.actions.insert(a);
 
 }
 
@@ -85,7 +89,7 @@ void learningFactor(int winner, int loser, state finalStateWinner, state finalSt
 	}
 }
 
-int ifWin(string board, state s)
+int ifWin(string board)
 {
 	//continue == 0, winner player1 == 1, winner player2 == 2, draw == 3
 	if((board[0] == board[1] == board[2]) && (board[0] == 'X') )
@@ -93,33 +97,33 @@ int ifWin(string board, state s)
 	else if((board[0] == board[1] == board[2]) && (board[0] == 'O') )
 		return 2;
 	else if((board[3] == board[4] == board[5]) && (board[3] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[3] == board[4] == board[5]) && (board[3] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[6] == board[7] == board[8]) && (board[6] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[6] == board[7] == board[8]) && (board[6] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[0] == board[3] == board[6]) && (board[0] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[0] == board[3] == board[6]) && (board[0] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[1] == board[4] == board[7]) && (board[1] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[1] == board[4] == board[7]) && (board[1] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[2] == board[5] == board[8]) && (board[2] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[2] == board[5] == board[8]) && (board[2] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[0] == board[4] == board[8]) && (board[0] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[0] == board[4] == board[8]) && (board[0] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 	else if((board[2] == board[4] == board[6]) && (board[2] == 'X') )
-		return learningFactor(1,2,s);
+		return 1;
 	else if((board[2] == board[4] == board[6]) && (board[2] == 'O') )
-		return learningFactor(2,1,s);
+		return 2;
 
 	bool draw = true;
 	for(int i=0; i<9; i++)//checking if there are no moves left
