@@ -5,148 +5,85 @@
 #include <algorithm>
 #include <cstdio>
 #include <string>
+#include <stdio.h>
 #include <stdlib.h> 
 using namespace std;
 
 #include "game.h"
 
-// state possibleStates( state s, string board, int player )
-// {
-// 	int count=0;
-// 	for(int i=0; i<9; i++)//count how many open spots
-// 	{
-// 		if(board[i] == '_')
-// 			count++;
-// 	}
-
-
-// 	for(int j=0; j<9; j++)
-// 	{
-// 		string temp = board;
-		
-// 		if(board[j] == '_')
-// 		{
-// 			action act;
-// 			act.location = j;
-// 			act.value = 0.5;//IDK WHAT THE VALUE IS!!!!!!!!! Do we need to look it up somehow?
-// 			if(player == 1)
-// 			{
-// 				temp[j] = 'X';
-
-// 			}
-// 			else
-// 			{
-// 				temp[j] = 'O';
-
-// 			}
-// 			s.possibleActions.insert(act);
-// 		}
-// 	}
-// }
-
-void evaluateHuman(state s, int turn) 
-{
-	//checks for actions
-	//selects best action
-
-	int location=0;//chosen move/action //dependent on data
-	if(turn == 1)
-		s.board[location] = 'X';
-	else
-		s.board[location] = 'O';
-	action a = chooseActionHuman(turn, s);
-	s.actions.insert(a);
-
-}
-
-void evaluateLearn(state s, int turn) 
-{
-	//checks for actions
-	//selects best action
-
-	int location=0;//chosen move/action //dependent on data
-	if(turn == 1)
-		s.board[location] = 'X';
-	else
-		s.board[location] = 'O';
-	action a = chooseActionLearn(turn, s);
-	s.actions.insert(a);
-
-}
-
-action chooseActionHuman( int player, state s, player p) 
+string AI::chooseActionHuman(string s) 
 {
 	//choose randomly taking values in to consideration, 
 	//favor exploitation (choosing higher values disproportionately).
 
+	//check possible actions for that player
+	float highestValue = -1000; //because values could be negative
+	int bestLocation = 0;
 
-	//check possible actions for that player, 
-	action a;
-	for(int i=0; i<p.states.size(); i++)
+	std::vector<state>::iterator it;
+	std::vector<action>::iterator it2;
+	for(it = states.begin(); it < states.end(); it++)
 	{
-		
-		if(s.board == p.states[i].board)
-		{
-			float highestValue = -1000; //because values could be negative
-			int bestLocation = 0;
-			for(int j=0; j<p.actions.size(); j++)
+		if(s == it->board)
+		{	
+			for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
 			{
-				if(p.actions[j].value > highestValue)
+				if(it2->value > highestValue)
 				{
-					highestValue = p.actions[j].value;
-					bestLocation = j;
+					highestValue = it2->value;
+					bestLocation = it2->location;
 				}
 			}
-			a.value = highestValue;
-			a.location = bestLocation;
 
-			return a;
+			break;
 		}
 	}
-	return a;
+	s[bestLocation] = token;
+	return s;
 
 }
 
-action chooseActionLearn( int player, state s, player p) 
-{
-	//choose randomly taking values in to consideration, 
-	//favor exploration (choosing lower values disproportionately), 
-	//choose highest value or random when equal
-	//int randNum1 = rand() % 100;
-	action a;
-	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-	int valueSum=0;
-	int valueProb[9];
-	for(int i=0; i<p.actions.size(); i++)
-	{
-		valueSum += (p.actions[i].value * 100);
-		valueProb[i] = valueSum;
-	}
-	int randNum = rand() % valueSum;
+// action AI::chooseActionLearn(string s) 
+// {
+// 	//choose randomly taking values in to consideration, 
+// 	//favor exploration (choosing lower values disproportionately), 
+// 	//choose highest value or random when equal
+// 	//int randNum1 = rand() % 100;
+// 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
+// 	int valueSum=0;
+// 	int valueProb[9];
+// 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
+// 	for(int i=0; i<p.actions.size(); i++)
+// 	{
+// 		valueSum += (p.actions[i].value * 100);
+// 		valueProb[i] = valueSum;
+// 	}
+// 	int randNum = rand() % valueSum;
 
-	if(0<randNum && randNum<valueProb[1])
-	{
-		a.value = p.actions[0].value;
-		a.location = p.actions[0].location;
-		return a;
-	}
+// 	if(0<randNum && randNum<valueProb[1])
+// 	{
+// 		a.value = p.actions[0].value;
+// 		a.location = p.actions[0].location;
+// 		return a;
+// 	}
 
-	for(int i=0; i<(p.actions.size()-1); i++)
-	{
-		for(int j=1; j<p.actions.size(); j++)
-		{
-			if(valueProb[i]<randNum && randNum<valueProb[j])
-			{
-				a.value = p.actions[j].value;
-				a.location = p.actions[j].location;
-				return a;
-			}
-		}
-	}
+// 	for(int i=0; i<(p.actions.size()-1); i++)
+// 	{
+// 		for(int j=1; j<p.actions.size(); j++)
+// 		{
+// 			if(valueProb[i]<randNum && randNum<valueProb[j])
+// 			{
+// 				a.value = p.actions[j].value;
+// 				a.location = p.actions[j].location;
+// 				return a;
+// 			}
+// 		}
+// 	}
 
-	return a;
-}
-void learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
+// 	return a;
+// }
+
+void AI::learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
 {
 	//apply 1 to last move
 	finalStateWinner.actions[finalStateWinner.actions.size()].value = 1;
@@ -168,89 +105,83 @@ void learningFactor(int winner, int loser, state finalStateWinner, state finalSt
 int ifWin(string board)
 {
 	//continue == 0, winner player1 == 1, winner player2 == 2, draw == 3
-	if((board[0] == board[1] == board[2]) && (board[0] == 'X') )
+	if((board[0] == board[1] && board[0] == board[2]) && (board[0] == 'X') )
 		return 1;
-	else if((board[0] == board[1] == board[2]) && (board[0] == 'O') )
+	else if((board[0] == board[1] && board[0] == board[2]) && (board[0] == 'O') )
 		return 2;
-	else if((board[3] == board[4] == board[5]) && (board[3] == 'X') )
+	else if((board[3] == board[4] && board[3] == board[5]) && (board[3] == 'X') )
 		return 1;
-	else if((board[3] == board[4] == board[5]) && (board[3] == 'O') )
+	else if((board[3] == board[4] && board[3] == board[5]) && (board[3] == 'O') )
 		return 2;
-	else if((board[6] == board[7] == board[8]) && (board[6] == 'X') )
+	else if((board[6] == board[7] && board[6] == board[8]) && (board[6] == 'X') )
 		return 1;
-	else if((board[6] == board[7] == board[8]) && (board[6] == 'O') )
+	else if((board[6] == board[7] && board[6] == board[8]) && (board[6] == 'O') )
 		return 2;
-	else if((board[0] == board[3] == board[6]) && (board[0] == 'X') )
+	else if((board[0] == board[3] && board[0] == board[6]) && (board[0] == 'X') )
 		return 1;
-	else if((board[0] == board[3] == board[6]) && (board[0] == 'O') )
+	else if((board[0] == board[3] && board[0] == board[6]) && (board[0] == 'O') )
 		return 2;
-	else if((board[1] == board[4] == board[7]) && (board[1] == 'X') )
+	else if((board[1] == board[4] && board[1] == board[7]) && (board[1] == 'X') )
 		return 1;
-	else if((board[1] == board[4] == board[7]) && (board[1] == 'O') )
+	else if((board[1] == board[4] && board[1] == board[7]) && (board[1] == 'O') )
 		return 2;
-	else if((board[2] == board[5] == board[8]) && (board[2] == 'X') )
+	else if((board[2] == board[5] && board[2] == board[8]) && (board[2] == 'X') )
 		return 1;
-	else if((board[2] == board[5] == board[8]) && (board[2] == 'O') )
+	else if((board[2] == board[5] && board[2] == board[8]) && (board[2] == 'O') )
 		return 2;
-	else if((board[0] == board[4] == board[8]) && (board[0] == 'X') )
+	else if((board[0] == board[4] && board[0] == board[8]) && (board[0] == 'X') )
 		return 1;
-	else if((board[0] == board[4] == board[8]) && (board[0] == 'O') )
+	else if((board[0] == board[4] && board[0] == board[8]) && (board[0] == 'O') )
 		return 2;
-	else if((board[2] == board[4] == board[6]) && (board[2] == 'X') )
+	else if((board[2] == board[4] && board[2] == board[6]) && (board[2] == 'X') )
 		return 1;
-	else if((board[2] == board[4] == board[6]) && (board[2] == 'O') )
+	else if((board[2] == board[4] && board[2] == board[6]) && (board[2] == 'O') )
 		return 2;
 
 	bool draw = true;
 	for(int i=0; i<9; i++)//checking if there are no moves left
 	{
 		if(board[i] == '_')
-			draw == false;
+			draw = false;
 	}
 	if(draw)
 		return 3;
 	return 0;
 }
 
-void writeActions(std::vector<state> states, string writeFile) //send vector (either Xstates or Ostates) and corresponding actions output file
+void AI::writeActions(string writeFile) //send vector (either Xstates or Ostates) and corresponding actions output file
 {
-	ofstream actions;
+	ofstream actionsFile;
  	actionsFile.open (writeFile);
 
- 	std::vector<state>::iterator it, it2;
+ 	std::vector<state>::iterator it;
+ 	std::vector<action>::iterator it2;
  	for(it = states.begin(); it < states.end(); it++)
  	{	
- 		actionsFile << it.board << endl;
- 		for(it2 = it.actions.begin(); it2 < it.actions.end(); it2++)
+ 		actionsFile << it->board << endl;
+ 		for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
 	 	{
-	 		actionsFile << it2.location << " " << it2.value << endl;
+	 		actionsFile << it2->location << " " << it2->value << endl;
 	 	}
  	}
 
 	actionsFile.close();
 }
 
-void readActions(std::vector<state> states, string readFile) //send vector (either Xstates or Ostates) and corresponding action file to read from
+void AI::readActions(string readFile) //send vector of states and corresponding action file to read from
 {
 	ifstream read;
  	read.open (readFile);
 
  	string item;
- 	std::vector<state>::iterator current;
+
  	while ( getline ( read, item) )
  	{
- 		if(item[0] == "_" || item[0] == "X" || item[0] == "O")
+ 		if(item[0] == '_' || item[0] == 'X' || item[0] == 'O')
  		{
- 			//if state, find state in vector and save as current
- 			std::vector<state>::iterator it;
- 			for(it = states.begin(); it < states.end(); it++)
- 			{
- 				if(item == it.board)
- 				{
- 					current = it;
- 					break;
- 				}
- 			}
+ 			state myState;
+ 			myState.board = item;
+ 			states.push_back(myState);
  		}
  		else
  		{
@@ -258,13 +189,34 @@ void readActions(std::vector<state> states, string readFile) //send vector (eith
  			action myaction;
 
  			//convert to int for location and float for value
- 			myaction.location = atoi(item[0]);
+ 			myaction.location = item[0] - '0';
  			string value(item.begin()+2, item.end()); //rm location int and space from string when copying to value
- 			myaction.value = strtof(value, NULL);
-
- 			current.actions.push_back(myaction);
+ 			const char* value2 = value.c_str();
+ 			myaction.value = strtof(value2, NULL);
+ 			states.back().actions.push_back(myaction);
  		}
  	}
 
 	read.close();
 }
+
+void printBoard(string board)
+{
+	for(int i = 0; i < 10; i++)
+	{
+		if(i % 3 == 0)
+		{
+			cout << endl;
+			if(i == 3 || i == 6)
+			cout << "---|---|---" << endl;
+		}
+		else
+			cout << '|';
+		if(board[i] != '_')
+			cout << " " << board[i] << " ";
+		else
+			cout << "   ";
+	}
+	cout << endl;
+}
+
