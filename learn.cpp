@@ -8,7 +8,7 @@ int main()
 
 	//at start, create all states for Xs and Os using states files
 
-	state currentState.board = "_________";
+	string currentboard = "_________";
 	int turn = 1;
 	while(ifWin(currentBoard) == 0)
 	{
@@ -20,9 +20,10 @@ int main()
 			turn=1;
 	}
 
-	if(ifWin(board, s) == 1)
+	winCheck = ifWin(board);
+	if(winCheck == 1)
 		learningFactor(1,2,player1State, player2State);
-	else if(ifWin(board, s) == 2)
+	else if(winCheck == 2)
 		learningFactor(2,1,player2State,player1State);
-	//draw
+	// there's a draw, for now we are not applying learningFactor in this case
 }
