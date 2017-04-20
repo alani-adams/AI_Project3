@@ -21,7 +21,7 @@ public: //move to private and add getters/setters for final code
 	std::vector<state> states;
 
 	AI(char value) {token = value;}
-	string chooseActionHuman(string s);
+	action chooseActionHuman(string s);
 	//action chooseActionLearn( int player, state s, player p);
 	void learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser);
 	void readActions(string readFile);

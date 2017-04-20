@@ -34,7 +34,7 @@ string AI::chooseActionHuman(string s)
 					bestLocation = it2->location;
 				}
 			}
-
+			//add pointer to action to the stack of actions taken
 			break;
 		}
 	}
@@ -43,45 +43,46 @@ string AI::chooseActionHuman(string s)
 
 }
 
-// action AI::chooseActionLearn(string s) 
-// {
-// 	//choose randomly taking values in to consideration, 
-// 	//favor exploration (choosing lower values disproportionately), 
-// 	//choose highest value or random when equal
-// 	//int randNum1 = rand() % 100;
-// 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-// 	int valueSum=0;
-// 	int valueProb[9];
-// 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
-// 	for(int i=0; i<p.actions.size(); i++)
-// 	{
-// 		valueSum += (p.actions[i].value * 100);
-// 		valueProb[i] = valueSum;
-// 	}
-// 	int randNum = rand() % valueSum;
+//TODO: rewrite
+action AI::chooseActionLearn(string s) 
+{
+	//choose randomly taking values in to consideration, 
+	//favor exploration (choosing lower values disproportionately), 
+	//choose highest value or random when equal
+	//int randNum1 = rand() % 100;
+	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
+	int valueSum=0;
+	int valueProb[9];
+	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
+	for(int i=0; i<p.actions.size(); i++)
+	{
+		valueSum += (p.actions[i].value * 100);
+		valueProb[i] = valueSum;
+	}
+	int randNum = rand() % valueSum;
 
-// 	if(0<randNum && randNum<valueProb[1])
-// 	{
-// 		a.value = p.actions[0].value;
-// 		a.location = p.actions[0].location;
-// 		return a;
-// 	}
+	if(0<randNum && randNum<valueProb[1])
+	{
+		a.value = p.actions[0].value;
+		a.location = p.actions[0].location;
+		return a;
+	}
 
-// 	for(int i=0; i<(p.actions.size()-1); i++)
-// 	{
-// 		for(int j=1; j<p.actions.size(); j++)
-// 		{
-// 			if(valueProb[i]<randNum && randNum<valueProb[j])
-// 			{
-// 				a.value = p.actions[j].value;
-// 				a.location = p.actions[j].location;
-// 				return a;
-// 			}
-// 		}
-// 	}
-
-// 	return a;
-// }
+	for(int i=0; i<(p.actions.size()-1); i++)
+	{
+		for(int j=1; j<p.actions.size(); j++)
+		{
+			if(valueProb[i]<randNum && randNum<valueProb[j])
+			{
+				a.value = p.actions[j].value;
+				a.location = p.actions[j].location;
+				return a;
+			}
+		}
+	}
+	//add pointer to action to the stack of actions taken
+	return a;
+}
 
 void AI::learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
 {
