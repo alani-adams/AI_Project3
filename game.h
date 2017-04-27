@@ -13,13 +13,11 @@ struct state
 class AI 
 {
 private:
-
-public: //move to private and add getters/setters for final code
 	char token;
-	state currentState;
 	std::stack<std::vector<action>::iterator> stack;
 	std::vector<state> states;
 
+public:
 	AI(char value) {token = value;}
 	string chooseActionHuman(string s);
 	//action chooseActionLearn( int player, state s, player p);
