@@ -22,7 +22,7 @@ string AI::chooseActionHuman(string s)
 	int bestLocation = 0;
 
 	std::vector<state>::iterator it;
-	std::vector<action>::iterator it2, save, check;
+	std::vector<action>::iterator it2, save;
 	for(it = states.begin(); it < states.end(); it++)
 	{
 		if(s == it->board)
@@ -52,33 +52,33 @@ string AI::chooseActionLearn(string s)
 	//choose highest value or random when equal
 	//int randNum1 = rand() % 100;
 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-	int valueSum=0;
-	int valueProb[9];
+	int valueSum=0, h = 0;
+	int valueProb[9] = {0,0,0,0,0,0,0,0,0};
 	std::vector<state>::iterator it;
-	std::vector<action>::iterator it2;
-	action temp;
+	std::vector<action>::iterator it2, save;
 
 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
 	for(it = states.begin(); it < states.end(); it++)
 	{
 		if(it->board == s)
 		{
-			int h=0;
 			for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
 			{
 				valueSum += (it2->value * 100);
+				h = it2->location;
 				valueProb[h] = valueSum;
-				h++;
 			}
 			break;
 		}
 	}
+	save = it->actions.begin(); //reset to 0
 
 	int randNum = rand() % valueSum;
 
-	if(0<=randNum && randNum<valueProb[0])
+	if(randNum<valueProb[0])
 	{
 		s[0] = token;
+		stack.push(save);
 		return s;
 	}
 
@@ -86,9 +86,11 @@ string AI::chooseActionLearn(string s)
 	{
 		for(int j=1; j<9; j++)
 		{
+			save++;
 			if(valueProb[i]<=randNum && randNum<valueProb[j])
 			{
 				s[j] = token;
+				stack.push(save);
 				return s;
 			}
 		}

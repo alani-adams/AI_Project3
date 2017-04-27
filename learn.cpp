@@ -1,10 +1,15 @@
 #include <iostream>
+#include <time.h>
+#include <stdlib.h> 
 #include "game.cpp"
 using namespace std;
 
 int main()
 {
 	//this is the AI vs AI version of the game
+
+	//seed rand function for exploration
+	srand(time(NULL));
 
 	//at start, create all states for Xs and Os using states files
 
@@ -22,13 +27,13 @@ int main()
 		if(turn == 1)
 		{
 			printBoard(currentboard);
-			currentboard = machine1.chooseActionHuman(currentboard);
+			currentboard = machine1.chooseActionLearn(currentboard);
 			turn=2;
 		}	
 		else
 		{
 			printBoard(currentboard);
-			currentboard = machine2.chooseActionHuman(currentboard);
+			currentboard = machine2.chooseActionLearn(currentboard);
 			turn=1;
 		}
 	}

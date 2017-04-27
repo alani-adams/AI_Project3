@@ -28,3 +28,4 @@ public:
 };
 
 //implement hash table for "have I been to this state before" to optimize for bigger state spaces
+//ran learning game 11000 times (12:06 - 12:32)
