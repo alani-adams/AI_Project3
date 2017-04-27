@@ -45,46 +45,57 @@ string AI::chooseActionHuman(string s)
 
 }
 
-//TODO: rewrite
-// action AI::chooseActionLearn(string s) 
-// {
-// 	//choose randomly taking values in to consideration, 
-// 	//favor exploration (choosing lower values disproportionately), 
-// 	//choose highest value or random when equal
-// 	//int randNum1 = rand() % 100;
-// 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-// 	int valueSum=0;
-// 	int valueProb[9];
-// 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
-// 	for(int i=0; i<p.actions.size(); i++)
-// 	{
-// 		valueSum += (p.actions[i].value * 100);
-// 		valueProb[i] = valueSum;
-// 	}
-// 	int randNum = rand() % valueSum;
+string AI::chooseActionLearn(string s) 
+{
+	//choose randomly taking values in to consideration, 
+	//favor exploration (choosing lower values disproportionately), 
+	//choose highest value or random when equal
+	//int randNum1 = rand() % 100;
+	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
+	int valueSum=0;
+	int valueProb[9];
+	std::vector<state>::iterator it;
+	std::vector<action>::iterator it2;
+	action temp;
 
-// 	if(0<randNum && randNum<valueProb[1])
-// 	{
-// 		a.value = p.actions[0].value;
-// 		a.location = p.actions[0].location;
-// 		return a;
-// 	}
+	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
+	for(it = states.begin(); it < states.end(); it++)
+	{
+		if(it->board == s)
+		{
+			int h=0;
+			for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
+			{
+				valueSum += (it2->value * 100);
+				valueProb[h] = valueSum;
+				h++;
+			}
+			break;
+		}
+	}
 
-// 	for(int i=0; i<(p.actions.size()-1); i++)
-// 	{
-// 		for(int j=1; j<p.actions.size(); j++)
-// 		{
-// 			if(valueProb[i]<randNum && randNum<valueProb[j])
-// 			{
-// 				a.value = p.actions[j].value;
-// 				a.location = p.actions[j].location;
-// 				return a;
-// 			}
-// 		}
-// 	}
-// 	//add pointer to action to the stack of actions taken
-// 	return a;
-// }
+	int randNum = rand() % valueSum;
+
+	if(0<=randNum && randNum<valueProb[0])
+	{
+		s[0] = token;
+		return s;
+	}
+
+	for(int i=0; i<9; i++)
+	{
+		for(int j=1; j<9; j++)
+		{
+			if(valueProb[i]<=randNum && randNum<valueProb[j])
+			{
+				s[j] = token;
+				return s;
+			}
+		}
+	}
+	//add pointer to action to the stack of actions taken
+	return s;
+}
 
 void AI::learningFactorWin() //applies learning feature
 {
