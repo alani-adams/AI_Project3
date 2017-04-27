@@ -1,0 +1,83 @@
+Welcome to the game of Tic Tac Toe. AI will go first and be X's, you will be O's.
+
+   |   |   
+---|---|---
+   | X |   
+---|---|---
+   |   |   
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+8
+
+   |   |   
+---|---|---
+ X | X |   
+---|---|---
+   |   | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+5
+
+   |   |   
+---|---|---
+ X | X | O 
+---|---|---
+ X |   | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+2
+
+   |   | O 
+---|---|---
+ X | X | O 
+---|---|---
+ X |   | O 
+  
+You Won.
+Kaylas-MacBook-Pro:AI_Project3 kaylaholcomb$ ./a.out
+Welcome to the game of Tic Tac Toe. AI will go first and be X's, you will be O's.
+
+   |   |   
+---|---|---
+   | X |   
+---|---|---
+   |   |   
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+8
+
+   |   |   
+---|---|---
+ X | X |   
+---|---|---
+   |   | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+5
+
+   |   | X 
+---|---|---
+ X | X | O 
+---|---|---
+   |   | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+6
+
+   |   | X 
+---|---|---
+ X | X | O 
+---|---|---
+ O | X | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+1
+
+ X | O | X 
+---|---|---
+ X | X | O 
+---|---|---
+ O | X | O 
+  
+You Tied.
+Kaylas-MacBook-Pro:AI_Project3 kaylaholcomb$ 
