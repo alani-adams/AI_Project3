@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cstdio>
 #include <string>
+#include <stack>
 #include <stdio.h>
 #include <stdlib.h> 
 using namespace std;
@@ -21,7 +22,7 @@ string AI::chooseActionHuman(string s)
 	int bestLocation = 0;
 
 	std::vector<state>::iterator it;
-	std::vector<action>::iterator it2;
+	std::vector<action>::iterator it2, save, check;
 	for(it = states.begin(); it < states.end(); it++)
 	{
 		if(s == it->board)
@@ -32,9 +33,10 @@ string AI::chooseActionHuman(string s)
 				{
 					highestValue = it2->value;
 					bestLocation = it2->location;
+					save = it2;
 				}
 			}
-			//add pointer to action to the stack of actions taken
+			stack.push(save);
 			break;
 		}
 	}
@@ -44,62 +46,73 @@ string AI::chooseActionHuman(string s)
 }
 
 //TODO: rewrite
-action AI::chooseActionLearn(string s) 
+// action AI::chooseActionLearn(string s) 
+// {
+// 	//choose randomly taking values in to consideration, 
+// 	//favor exploration (choosing lower values disproportionately), 
+// 	//choose highest value or random when equal
+// 	//int randNum1 = rand() % 100;
+// 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
+// 	int valueSum=0;
+// 	int valueProb[9];
+// 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
+// 	for(int i=0; i<p.actions.size(); i++)
+// 	{
+// 		valueSum += (p.actions[i].value * 100);
+// 		valueProb[i] = valueSum;
+// 	}
+// 	int randNum = rand() % valueSum;
+
+// 	if(0<randNum && randNum<valueProb[1])
+// 	{
+// 		a.value = p.actions[0].value;
+// 		a.location = p.actions[0].location;
+// 		return a;
+// 	}
+
+// 	for(int i=0; i<(p.actions.size()-1); i++)
+// 	{
+// 		for(int j=1; j<p.actions.size(); j++)
+// 		{
+// 			if(valueProb[i]<randNum && randNum<valueProb[j])
+// 			{
+// 				a.value = p.actions[j].value;
+// 				a.location = p.actions[j].location;
+// 				return a;
+// 			}
+// 		}
+// 	}
+// 	//add pointer to action to the stack of actions taken
+// 	return a;
+// }
+
+void AI::learningFactorWin() //applies learning feature
 {
-	//choose randomly taking values in to consideration, 
-	//favor exploration (choosing lower values disproportionately), 
-	//choose highest value or random when equal
-	//int randNum1 = rand() % 100;
-	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-	int valueSum=0;
-	int valueProb[9];
-	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
-	for(int i=0; i<p.actions.size(); i++)
-	{
-		valueSum += (p.actions[i].value * 100);
-		valueProb[i] = valueSum;
-	}
-	int randNum = rand() % valueSum;
+	std::vector<action>::iterator move = stack.top(); //get top action to edit its value
+	move->value = 1; //set last action to be value of 1 because it leads to an immediate win
+	stack.pop(); //rm the last action from the stack
 
-	if(0<randNum && randNum<valueProb[1])
+	float decay = 1;
+	while(stack.size() != 0)
 	{
-		a.value = p.actions[0].value;
-		a.location = p.actions[0].location;
-		return a;
+		move = stack.top();
+		move->value += (move->value * (0.1 * decay));
+		decay *= 0.2;
+		stack.pop();
 	}
-
-	for(int i=0; i<(p.actions.size()-1); i++)
-	{
-		for(int j=1; j<p.actions.size(); j++)
-		{
-			if(valueProb[i]<randNum && randNum<valueProb[j])
-			{
-				a.value = p.actions[j].value;
-				a.location = p.actions[j].location;
-				return a;
-			}
-		}
-	}
-	//add pointer to action to the stack of actions taken
-	return a;
 }
 
-void AI::learningFactor(int winner, int loser, state finalStateWinner, state finalStateLoser) //applies learning feature
+void AI::learningFactorLoss() //applies learning feature
 {
-	//apply 1 to last move
-	finalStateWinner.actions[finalStateWinner.actions.size()].value = 1;
-	float decay = 1;
-	for(int i=1; i<finalStateWinner.actions.size(); i++)
-	{
-		finalStateWinner.actions[i].value += (finalStateWinner.actions[i].value * (0.1 * decay));
-		decay *= 0.2;
-	}
+	std::vector<action>::iterator move;
 
-	decay = 1;
-	for(int i=1; i<finalStateLoser.actions.size(); i++)
+	float decay = 1;
+	while(stack.size() != 0)
 	{
-		finalStateLoser.actions[i].value -= (finalStateLoser.actions[i].value * (0.1 * decay));
+		move = stack.top();
+		move->value -= (move->value * (0.1 * decay));
 		decay *= 0.2;
+		stack.pop();
 	}
 }
 

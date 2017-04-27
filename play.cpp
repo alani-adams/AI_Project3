@@ -49,11 +49,18 @@ int main()
 	printBoard(currentboard);
 
 	if(winCheck == 1)
+	{
 		cout << "You Lost." << endl; 
+		machine.learningFactorWin();
+	}
 	else if(winCheck == 2)
+	{
 		cout << "You Won." << endl;
+		machine.learningFactorLoss();
+	}
 	else
+	{
 		cout << "You Tied." << endl;
-
-
+	}
+	machine.writeActions("Xactions.txt");
 }
