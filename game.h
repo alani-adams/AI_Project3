@@ -20,7 +20,7 @@ private:
 public:
 	AI(char value) {token = value;}
 	string chooseActionHuman(string s);
-	//action chooseActionLearn( int player, state s, player p);
+	string chooseActionLearn(string s);
 	void learningFactorWin();
 	void learningFactorLoss();
 	void readActions(string readFile);
