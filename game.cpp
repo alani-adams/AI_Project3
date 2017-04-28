@@ -110,6 +110,8 @@ void AI::learningFactorWin() //applies learning feature
 	{
 		move = stack.top();
 		move->value += (move->value * (0.1 * decay));
+		if(move->value > 1)
+			move->value = 1;
 		decay *= 0.2;
 		stack.pop();
 	}
@@ -124,6 +126,8 @@ void AI::learningFactorLoss() //applies learning feature
 	{
 		move = stack.top();
 		move->value -= (move->value * (0.1 * decay));
+		if(move->value < 0)
+			move->value = 0;
 		decay *= 0.2;
 		stack.pop();
 	}
