@@ -29,7 +29,7 @@ string AI::guess(char letter, string board, string word)
 	if(!found)
 	{
 		strikes.push_back(letter);
-		//printBoard(board);
+		printBoard(board);
 	}
 	else
 	{
@@ -206,7 +206,7 @@ void AI::learningFactorWin() //applies learning feature
 			if(move->value < 0)
 			move->value = 0;
 		}
-		decay *= 0.2;
+		decay *= 0.05;
 		stack.pop();
 	}
 }
@@ -231,7 +231,7 @@ void AI::learningFactorLoss() //applies learning feature
 			if(move->value < 0)
 			move->value = 0;
 		}
-		decay *= 0.2;
+		decay *= 0.05;
 		stack.pop();
 	}
 }
