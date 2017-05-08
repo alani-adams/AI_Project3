@@ -206,7 +206,7 @@ void AI::learningFactorWin() //applies learning feature
 			if(move->value < 0)
 			move->value = 0;
 		}
-		decay *= 0.05;
+		decay *= 0.01;
 		stack.pop();
 	}
 }
@@ -231,7 +231,7 @@ void AI::learningFactorLoss() //applies learning feature
 			if(move->value < 0)
 			move->value = 0;
 		}
-		decay *= 0.05;
+		decay *= 0.01;
 		stack.pop();
 	}
 }
