@@ -27,7 +27,15 @@ string AI::guess(char letter, string board, string word)
 	}
 
 	if(!found)
+	{
 		strikes.push_back(letter);
+		//printBoard(board);
+	}
+	else
+	{
+		cout << "\nBoard: " << board << endl;
+		cout << letter << " was found!" << endl;
+	}
 
 	return board;
 }
@@ -98,59 +106,83 @@ char AI::chooseActionHuman(string s)
 
 }
 
-// char AI::chooseActionLearn(string s) 
-// {
-// 	//choose randomly taking values in to consideration, 
-// 	//favor exploration (choosing lower values disproportionately), 
-// 	//choose highest value or random when equal
-// 	//int randNum1 = rand() % 100;
-// 	//add all the values together and multiply by 100. get rand() % that num and see which one it would fall into
-// 	int valueSum=0, h = 0;
-// 	int valueProb[9] = {0,0,0,0,0,0,0,0,0};
-// 	std::vector<state>::iterator it;
-// 	std::vector<action>::iterator it2, save;
+char AI::chooseActionLearn(string s) 
+{
+	int valueSum=0, h = 0;
+	int valueProb[26] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	std::vector<state>::iterator it;
+	std::vector<action>::iterator it2, save;
+	bool found = false, set = false;
+	char bestLetter = 'a';
 
-// 	/*TODO: need to find corresponding state in vector before referencing actions vector of that state*/
-// 	for(it = states.begin(); it < states.end(); it++)
-// 	{
-// 		if(it->board == s)
-// 		{
-// 			for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
-// 			{
-// 				valueSum += (it2->value * 100);
-// 				h = it2->letter;
-// 				valueProb[h] = valueSum;
-// 			}
-// 			break;
-// 		}
-// 	}
-// 	save = it->actions.begin(); //reset to 0
+	for(it = states.begin(); it < states.end(); it++)
+	{
+		if(it->board == s)
+		{
+			found = true;
 
-// 	int randNum = rand() % valueSum;
+			for(it2 = it->actions.begin(); it2 < it->actions.end(); it2++)
+			{
+				if(!(std::find(strikes.begin(), strikes.end(), it2->letter) != strikes.end()) )
+				{
+					if(!set)
+					{
+						save = it->actions.begin();
+						set = true;
+					}
 
-// 	if(randNum<valueProb[0])
-// 	{
-// 		s[0] = token;
-// 		stack.push(save);
-// 		return s;
-// 	}
+					valueSum += (it2->value * 100);
+					h = it2->letter - 97;
+					valueProb[h] = valueSum;
+				}
+			}
+			break;
+		}
+	}
 
-// 	for(int i=0; i<9; i++)
-// 	{
-// 		for(int j=1; j<9; j++)
-// 		{
-// 			save++;
-// 			if(valueProb[i]<=randNum && randNum<valueProb[j])
-// 			{
-// 				s[j] = token;
-// 				stack.push(save);
-// 				return s;
-// 			}
-// 		}
-// 	}
-// 	//add pointer to action to the stack of actions taken
-// 	return s;
-// }
+	if(!found) //haven't visited this state and must create new state and actions
+	{
+		createState(s);	
+		for(it2 = states.back().actions.begin(); it2 < states.back().actions.end(); it2++)
+		{
+			if(!(std::find(strikes.begin(), strikes.end(), it2->letter) != strikes.end()) )
+			{
+				valueSum += (it2->value * 100);
+				h = it2->letter - 97;
+				valueProb[h] = valueSum;
+			}
+		}
+		save = states.back().actions.begin();
+	}
+
+	int randNum = rand() % valueSum;
+
+	if(randNum<valueProb[0] && !(std::find(strikes.begin(), strikes.end(), save->letter) != strikes.end()))
+	{
+		bestLetter = save->letter;
+		stack.push(save);
+		return bestLetter;
+	}
+
+	for(int i=0; i<26; i++)
+	{
+		for(int j=1; j<26; j++)
+		{
+			save++;
+
+			if(valueProb[j] == 0)
+				j++;
+
+			if(valueProb[i]<=randNum && randNum<valueProb[j] && isalpha(save->letter) && !(std::find(strikes.begin(), strikes.end(), save->letter) != strikes.end()))
+			{
+				bestLetter = save->letter;
+				stack.push(save);
+				return bestLetter;
+			}
+		}
+	}
+	return bestLetter;
+}
 
 void AI::learningFactorWin() //applies learning feature
 {
@@ -162,9 +194,18 @@ void AI::learningFactorWin() //applies learning feature
 	while(stack.size() != 0)
 	{
 		move = stack.top();
-		move->value += (move->value * (0.1 * decay));
-		if(move->value > 1)
+		if(!(std::find(strikes.begin(), strikes.end(), move->letter) != strikes.end()))
+		{
+			move->value += (move->value * (0.1 * decay));
+			if(move->value > 1)
 			move->value = 1;
+		}
+		else
+		{
+			move->value -= (move->value * (0.1 * decay));
+			if(move->value < 0)
+			move->value = 0;
+		}
 		decay *= 0.2;
 		stack.pop();
 	}
@@ -178,9 +219,18 @@ void AI::learningFactorLoss() //applies learning feature
 	while(stack.size() != 0)
 	{
 		move = stack.top();
-		move->value -= (move->value * (0.1 * decay));
-		if(move->value < 0)
+		if(!(std::find(strikes.begin(), strikes.end(), move->letter) != strikes.end()))
+		{
+			move->value += (move->value * (0.1 * decay));
+			if(move->value > 1)
+			move->value = 1;
+		}
+		else
+		{
+			move->value -= (move->value * (0.1 * decay));
+			if(move->value < 0)
 			move->value = 0;
+		}
 		decay *= 0.2;
 		stack.pop();
 	}
@@ -262,8 +312,6 @@ void AI::readActions(string readFile) //send vector of states and corresponding 
 
 string chooseWord(string readFile)
 {
-	srand(time(NULL));
-
 	ifstream read;
  	read.open (readFile);
 

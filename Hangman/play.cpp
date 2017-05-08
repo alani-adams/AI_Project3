@@ -31,7 +31,6 @@ int main()
 	{
 		letter = machine.chooseActionHuman(currentboard);
 		currentboard = machine.guess(letter,currentboard,input);
-		machine.printBoard(currentboard);
 	}
 
 	int winCheck = ifWin(currentboard);

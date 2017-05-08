@@ -4,6 +4,7 @@ using namespace std;
 
 int main()
 {
+	srand(time(NULL));
 	//this is the computer run version of the game (random pick word to play with)
 	AI machine;
 
@@ -21,13 +22,11 @@ int main()
 
 	while(ifWin(currentboard) == 0 && machine.ifLoss() == 0)
 	{
-		letter = machine.chooseActionHuman(currentboard);
+		letter = machine.chooseActionLearn(currentboard);
 		currentboard = machine.guess(letter,currentboard,word);
-		machine.printBoard(currentboard);
 	}
 
 	int winCheck = ifWin(currentboard);
-	machine.printBoard(currentboard);
 
 	if(winCheck == 1)
 	{
@@ -36,6 +35,7 @@ int main()
 	}
 	else
 	{
+		machine.printBoard(currentboard);
 		cout << "AI Lost." << endl;
 		machine.learningFactorLoss();
 	}

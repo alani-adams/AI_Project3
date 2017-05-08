@@ -1,0 +1,43 @@
+Board: a_a__
+Strikes: 10/10, y z x w v b c d e f 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |   _/ \_
+_|_
+You Won.
+
+Board: a_a_i
+Strikes: 10/10, y z x w v g h b c d 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |   _/ \_
+_|_
+You Won.
+
+Board: ala_i
+Strikes: 10/10, y z x w v k b c d e 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |   _/ \_
+_|_
+You Won.
+
+Board: alani
+Strikes: 6/10, y z x w v m 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |
+_|_
+You Lost.

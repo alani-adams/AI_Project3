@@ -1,0 +1,32 @@
+Board: __yl_
+Strikes: 10/10, s e t d g h i n u v 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |   _/ \_
+_|_
+You Won.
+
+Board: _ayla
+Strikes: 10/10, s e t w z f b c d g 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |   _/ \_
+_|_
+You Won.
+
+Board: kayla
+Strikes: 6/10, s e f h i j 
+ ______
+ |     |
+ |     o
+ |   _/|\_
+ |     |
+ |
+_|_
+You Lost.
