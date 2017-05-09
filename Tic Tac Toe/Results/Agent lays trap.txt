@@ -1,0 +1,45 @@
+Welcome to the game of Tic Tac Toe. AI will go first and be X's, you will be O's.
+
+ X |   |   
+---|---|---
+   |   |   
+---|---|---
+   |   |   
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+8
+
+ X |   | X 
+---|---|---
+   |   |   
+---|---|---
+   |   | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+1
+
+ X | O | X 
+---|---|---
+   |   |   
+---|---|---
+   | X | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+5
+
+ X | O | X 
+---|---|---
+   |   | O 
+---|---|---
+ X | X | O 
+  
+Make your move. Enter 0-9 to place your piece in the corresponding spot.
+3
+
+ X | O | X 
+---|---|---
+ O | X | O 
+---|---|---
+ X | X | O 
+  
+You Lost.
